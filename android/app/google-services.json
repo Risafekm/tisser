@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "60017092484",
+    "project_id": "tisser-ef10a",
+    "storage_bucket": "tisser-ef10a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:60017092484:android:eed83300a8af24f2e29fd1",
+        "android_client_info": {
+          "package_name": "com.example.tisser_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAaicOlOLgQOFk1B3hOiw3kW3aiv8cyF3U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
