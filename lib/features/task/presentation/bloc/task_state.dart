@@ -1,0 +1,20 @@
+// features/lead/presentation/bloc/lead_state.dart
+import 'package:tisser_app/features/task/domain/entities/task_entities.dart';
+
+abstract class TaskState {}
+
+class TaskInitial extends TaskState {}
+
+class TaskLoading extends TaskState {}
+
+class TaskLoaded extends TaskState {
+  final List<TaskEntity> tasks;
+
+  TaskLoaded(this.tasks);
+}
+
+class TaskError extends TaskState {
+  final String message;
+
+  TaskError(this.message);
+}

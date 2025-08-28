@@ -7,6 +7,7 @@ class MyTextFiled extends StatelessWidget {
   final String text;
   final IconData? icon;
   final bool obscureText;
+  final int? maxLines;
 
   const MyTextFiled({
     super.key,
@@ -14,6 +15,7 @@ class MyTextFiled extends StatelessWidget {
     required this.text,
     this.icon,
     this.obscureText = false,
+    this.maxLines = 1,
   });
 
   @override
@@ -21,10 +23,42 @@ class MyTextFiled extends StatelessWidget {
     return TextField(
       controller: controller,
       obscureText: obscureText,
+      maxLines: maxLines,
       decoration: InputDecoration(
-        border: const OutlineInputBorder(),
-        prefixIcon: icon != null ? Icon(icon) : null,
         labelText: text,
+        prefixIcon: icon != null ? Icon(icon) : null,
+
+        // Default border
+        border: const OutlineInputBorder(),
+
+        // Enabled border
+        enabledBorder: const OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.grey, width: 1.0),
+        ),
+
+        // Focused border
+        focusedBorder: const OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.deepOrange, width: 2.0),
+        ),
+
+        // Disabled border
+        disabledBorder: const OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.grey,
+            width: 1.0,
+            style: BorderStyle.solid,
+          ),
+        ),
+
+        // Error border
+        errorBorder: const OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.red, width: 1.0),
+        ),
+
+        // Focused error border
+        focusedErrorBorder: const OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.red, width: 2.0),
+        ),
       ),
     );
   }

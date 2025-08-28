@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tisser_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:tisser_app/features/auth/presentation/bloc/auth_events.dart';
 import 'package:tisser_app/features/auth/presentation/bloc/auth_state.dart';
-import 'package:tisser_app/features/auth/presentation/pages/home_page.dart';
+import 'package:tisser_app/features/task/presentation/pages/home_page.dart';
 import 'package:tisser_app/features/auth/presentation/pages/signup_page.dart';
 import 'package:tisser_app/features/auth/presentation/widgets/custom_button.dart';
 import 'package:tisser_app/features/auth/presentation/widgets/my_textfield.dart';
