@@ -6,6 +6,7 @@ class MyTextFiled extends StatelessWidget {
   final TextEditingController controller;
   final String text;
   final IconData? icon;
+  final IconData? suffix;
   final bool obscureText;
   final int? maxLines;
 
@@ -14,6 +15,7 @@ class MyTextFiled extends StatelessWidget {
     required this.controller,
     required this.text,
     this.icon,
+    this.suffix,
     this.obscureText = false,
     this.maxLines = 1,
   });
@@ -27,6 +29,7 @@ class MyTextFiled extends StatelessWidget {
       decoration: InputDecoration(
         labelText: text,
         prefixIcon: icon != null ? Icon(icon) : null,
+        suffixIcon: suffix != null ? Icon(suffix) : null,
 
         // Default border
         border: const OutlineInputBorder(),

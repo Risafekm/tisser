@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 import 'package:tisser_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:tisser_app/features/auth/presentation/bloc/auth_events.dart';
 import 'package:tisser_app/features/auth/presentation/bloc/auth_state.dart';
@@ -41,19 +42,17 @@ class SignupPage extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    SizedBox(height: 150),
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        'Register new account',
-                        style: TextStyle(
-                          color: Colors.deepOrange,
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                    const SizedBox(height: 80),
+
+                    Lottie.asset(
+                      'assets/login.json',
+                      height: 220,
+                      repeat: true,
+                      reverse: false,
+                      animate: true,
                     ),
-                    SizedBox(height: 30),
+
+                    const SizedBox(height: 30),
 
                     MyTextFiled(
                       controller: emailController,
@@ -68,9 +67,15 @@ class SignupPage extends StatelessWidget {
                       icon: Icons.key,
                     ),
 
-                    SizedBox(height: 20),
+                    SizedBox(height: 55),
                     if (state is AuthLoading)
-                      Center(child: CircularProgressIndicator())
+                      Lottie.asset(
+                        'assets/loading.json',
+                        height: 40,
+                        repeat: true,
+                        reverse: false,
+                        animate: true,
+                      )
                     else
                       SizedBox(
                         width: double.infinity,

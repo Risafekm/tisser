@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 import 'package:tisser_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:tisser_app/features/auth/presentation/bloc/auth_events.dart';
 import 'package:tisser_app/features/auth/presentation/bloc/auth_state.dart';
@@ -28,9 +29,9 @@ class LoginScreen extends StatelessWidget {
                 );
               } else if (state is AuthError) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
+                  const SnackBar(
                     backgroundColor: Colors.red,
-                    content: Text("login error"),
+                    content: Text("Login error"),
                   ),
                 );
               }
@@ -41,19 +42,17 @@ class LoginScreen extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    SizedBox(height: 150),
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        'Login',
-                        style: TextStyle(
-                          color: Colors.deepOrange,
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                    const SizedBox(height: 80),
+
+                    Lottie.asset(
+                      'assets/login.json',
+                      height: 220,
+                      repeat: true,
+                      reverse: false,
+                      animate: true,
                     ),
-                    SizedBox(height: 20),
+
+                    const SizedBox(height: 30),
 
                     MyTextFiled(
                       controller: emailController,
@@ -61,27 +60,34 @@ class LoginScreen extends StatelessWidget {
                       icon: Icons.email,
                     ),
 
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     MyTextFiled(
                       controller: passwordController,
                       text: 'Enter password',
                       icon: Icons.key,
                     ),
-                    SizedBox(height: 15),
+
+                    const SizedBox(height: 15),
                     Padding(
                       padding: const EdgeInsets.only(right: 4.0),
                       child: Align(
                         alignment: Alignment.bottomRight,
                         child: Text(
-                          'Forgot password',
-                          style: TextStyle(color: Colors.blue),
+                          'Forgot password?',
+                          style: TextStyle(color: Colors.blue.shade600),
                         ),
                       ),
                     ),
 
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     if (state is AuthLoading)
-                      Center(child: CircularProgressIndicator())
+                      Lottie.asset(
+                        'assets/loading.json',
+                        height: 40,
+                        repeat: true,
+                        reverse: false,
+                        animate: true,
+                      )
                     else
                       SizedBox(
                         width: double.infinity,
@@ -98,13 +104,12 @@ class LoginScreen extends StatelessWidget {
                         ),
                       ),
 
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
 
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
+                        const Text(
                           'New member?  ',
                           style: TextStyle(color: Colors.black54, fontSize: 14),
                         ),
@@ -119,7 +124,11 @@ class LoginScreen extends StatelessWidget {
                           },
                           child: Text(
                             'Register now',
-                            style: TextStyle(color: Colors.blue, fontSize: 16),
+                            style: TextStyle(
+                              color: Colors.blue.shade600,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
                       ],

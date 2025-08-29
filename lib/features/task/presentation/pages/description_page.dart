@@ -1,5 +1,6 @@
 // features/task/presentation/pages/task_details_page.dart
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:tisser_app/features/task/domain/entities/task_entities.dart';
 
@@ -42,7 +43,10 @@ class TaskDetailsPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text("Task Details"),
+        title: const Text(
+          "Task Details",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         backgroundColor: Colors.deepOrange,
         foregroundColor: Colors.white,
         elevation: 0,
@@ -67,7 +71,7 @@ class TaskDetailsPage extends StatelessWidget {
                   child: Text(
                     task.title,
                     style: const TextStyle(
-                      fontSize: 22,
+                      fontSize: 26,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -114,8 +118,8 @@ class TaskDetailsPage extends StatelessWidget {
             // Description
             Text(
               task.description,
-              style: const TextStyle(
-                fontSize: 16,
+              style: GoogleFonts.actor(
+                fontSize: 18,
                 height: 1.5,
                 color: Colors.black87,
               ),

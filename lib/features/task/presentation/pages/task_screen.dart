@@ -1,6 +1,7 @@
 // features/task/presentation/pages/tasks_page.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:tisser_app/features/task/domain/entities/task_entities.dart';
 import 'package:tisser_app/features/task/presentation/bloc/task_bloc.dart';
@@ -14,97 +15,91 @@ class TasksPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.grey[50],
-        appBar: AppBar(
-          toolbarHeight: 60,
-          title: const Text(
-            'Tasks Management',
-            style: TextStyle(fontWeight: FontWeight.w600),
+    return Scaffold(
+      backgroundColor: Colors.grey[50],
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(90),
+        child: Padding(
+          padding: const EdgeInsets.only(top: 30),
+          child: AppBar(
+            title: const Text(
+              'Tasks Management',
+              style: TextStyle(fontWeight: FontWeight.w600),
+            ),
+            backgroundColor: Colors.white,
+            foregroundColor: Colors.deepOrange,
+            elevation: 1,
+            shadowColor: Colors.grey.withOpacity(0.3),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.search, size: 24),
+                onPressed: () {},
+              ),
+              IconButton(
+                icon: const Icon(Icons.filter_list, size: 24),
+                onPressed: () {},
+              ),
+            ],
           ),
-          backgroundColor: Colors.white,
-          foregroundColor: Colors.deepOrange,
-          elevation: 1,
-          shadowColor: Colors.grey.withOpacity(0.3),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.search, size: 24),
-              onPressed: () {
-                // Implement search functionality
-              },
-            ),
-            IconButton(
-              icon: const Icon(Icons.filter_list, size: 24),
-              onPressed: () {
-                // Implement filter functionality
-              },
-            ),
-          ],
         ),
-        body: BlocBuilder<TaskBloc, TaskState>(
-          builder: (context, state) {
-            if (state is TaskLoading) {
-              return const Center(
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.deepOrange),
-                ),
-              );
-            } else if (state is TaskError) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      Icons.error_outline,
-                      size: 64,
-                      color: Colors.grey,
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      state.message,
-                      style: const TextStyle(fontSize: 16, color: Colors.grey),
-                    ),
-                    const SizedBox(height: 24),
-                    ElevatedButton(
-                      onPressed: () {
-                        context.read<TaskBloc>().add(LoadTasksEvent());
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.deepOrange,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      child: const Text(
-                        'Retry',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            } else if (state is TaskLoaded) {
-              return TasksList(tasks: state.tasks);
-            }
-            return const NoTasksPlaceholder();
-          },
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => AddEditTaskPage()),
+      ),
+
+      body: BlocBuilder<TaskBloc, TaskState>(
+        builder: (context, state) {
+          if (state is TaskLoading) {
+            return const Center(
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.deepOrange),
+              ),
             );
-          },
-          backgroundColor: Colors.deepOrange,
-          foregroundColor: Colors.white,
-          elevation: 4,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: const Icon(Icons.add, size: 28),
-        ),
+          } else if (state is TaskError) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.error_outline, size: 64, color: Colors.grey),
+                  const SizedBox(height: 16),
+                  Text(
+                    state.message,
+                    style: const TextStyle(fontSize: 16, color: Colors.grey),
+                  ),
+                  const SizedBox(height: 24),
+                  ElevatedButton(
+                    onPressed: () {
+                      context.read<TaskBloc>().add(LoadTasksEvent());
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.deepOrange,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: const Text(
+                      'Retry',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          } else if (state is TaskLoaded) {
+            return TasksList(tasks: state.tasks);
+          }
+          return const NoTasksPlaceholder();
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AddEditTaskPage()),
+          );
+        },
+        backgroundColor: Colors.deepOrange,
+        foregroundColor: Colors.white,
+        elevation: 4,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: const Icon(Icons.add, size: 28),
       ),
     );
   }
@@ -244,7 +239,7 @@ class TaskCard extends StatelessWidget {
                     Expanded(
                       child: Text(
                         task.title,
-                        style: const TextStyle(
+                        style: GoogleFonts.lora(
                           fontWeight: FontWeight.w600,
                           fontSize: 18,
                         ),
@@ -334,7 +329,10 @@ class TaskCard extends StatelessWidget {
                   task.description,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(color: Colors.grey[600], height: 1.4),
+                  style: GoogleFonts.actor(
+                    color: Colors.grey[600],
+                    height: 1.4,
+                  ),
                 ),
                 const SizedBox(height: 16),
                 Row(

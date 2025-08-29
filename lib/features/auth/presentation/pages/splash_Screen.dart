@@ -26,11 +26,26 @@ class SplashScreen extends StatelessWidget {
           }
         });
       },
-      child: const Scaffold(
-        body: Center(
-          child: Text(
-            "Splash Screen",
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+      child: Scaffold(
+        body: Container(
+          height: double.infinity,
+          width: double.infinity,
+          color: Colors.white,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Image.asset('assets/task.png', height: 200),
+              SizedBox(height: 20),
+              Text(
+                "Task Reminder",
+                style: TextStyle(
+                  fontSize: 28,
+                  color: Colors.deepOrange,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
           ),
         ),
       ),

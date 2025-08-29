@@ -57,9 +57,9 @@ class MainBottomBar extends StatelessWidget {
                 ),
                 child: Theme(
                   data: Theme.of(context).copyWith(
-                    splashFactory: NoSplash.splashFactory, // 🚫 remove splash
-                    highlightColor: Colors.transparent, // 🚫 remove highlight
-                    splashColor: Colors.transparent, // 🚫 remove ripple
+                    splashFactory: NoSplash.splashFactory,
+                    highlightColor: Colors.transparent,
+                    splashColor: Colors.transparent,
                   ),
                   child: BottomNavigationBar(
                     currentIndex: currentIndex,
@@ -73,12 +73,12 @@ class MainBottomBar extends StatelessWidget {
                     type: BottomNavigationBarType.fixed,
                     elevation: 0,
                     selectedLabelStyle: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 14, // 🔥 Bigger label
                     ),
                     unselectedLabelStyle: const TextStyle(
                       fontWeight: FontWeight.w500,
-                      fontSize: 12,
+                      fontSize: 13,
                     ),
                     items: [
                       _buildBottomNavItem(
@@ -125,7 +125,7 @@ class MainBottomBar extends StatelessWidget {
     return BottomNavigationBarItem(
       icon: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
-        padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+        padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
         decoration: BoxDecoration(
           color:
               isSelected
@@ -135,7 +135,7 @@ class MainBottomBar extends StatelessWidget {
         ),
         child: Icon(
           isSelected ? activeIcon : icon,
-          size: 24,
+          size: 28,
           color: isSelected ? Colors.deepOrange : Colors.grey[600],
         ),
       ),
