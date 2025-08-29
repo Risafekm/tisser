@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:tisser_app/core/utils/export_service.dart';
 import 'package:tisser_app/features/task/domain/entities/task_entities.dart';
 import 'package:tisser_app/features/task/presentation/bloc/task_bloc.dart';
 import 'package:tisser_app/features/task/presentation/bloc/task_event.dart';
@@ -31,13 +32,69 @@ class TasksPage extends StatelessWidget {
             elevation: 1,
             shadowColor: Colors.grey.withOpacity(0.3),
             actions: [
-              IconButton(
-                icon: const Icon(Icons.search, size: 24),
-                onPressed: () {},
-              ),
-              IconButton(
-                icon: const Icon(Icons.filter_list, size: 24),
-                onPressed: () {},
+              //pdf or csv
+              PopupMenuButton<String>(
+                icon: const Icon(Icons.download, size: 24),
+                onSelected: (v) async {
+                  final state = context.read<TaskBloc>().state;
+                  if (state is! TaskLoaded) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('No tasks to export yet.')),
+                    );
+                    return;
+                  }
+
+                  try {
+                    if (v == 'csv') {
+                      final file = await ExportService.exportTasksToCsv(
+                        tasks: state.tasks,
+                      );
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              'CSV saved: ${file.path.split('/').last}',
+                            ),
+                          ),
+                        );
+                      }
+                      await ExportService.shareFile(
+                        file,
+                        subject: 'Tasks CSV',
+                        text: 'Tasks report attached.',
+                      );
+                    } else if (v == 'pdf') {
+                      final file = await ExportService.exportTasksToPdf(
+                        tasks: state.tasks,
+                      );
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              'PDF saved: ${file.path.split('/').last}',
+                            ),
+                          ),
+                        );
+                      }
+                      await ExportService.shareFile(
+                        file,
+                        subject: 'Tasks PDF',
+                        text: 'Tasks report attached.',
+                      );
+                    }
+                  } catch (e) {
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Export failed: $e')),
+                      );
+                    }
+                  }
+                },
+                itemBuilder:
+                    (context) => const [
+                      PopupMenuItem(value: 'csv', child: Text('Export as CSV')),
+                      PopupMenuItem(value: 'pdf', child: Text('Export as PDF')),
+                    ],
               ),
             ],
           ),
