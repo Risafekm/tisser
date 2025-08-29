@@ -17,6 +17,9 @@ class SignupPage extends StatelessWidget {
     final emailController = TextEditingController();
     final passwordController = TextEditingController();
 
+    // 👇 notifier for password visibility
+    final ValueNotifier<bool> obscurePassword = ValueNotifier<bool>(true);
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -29,7 +32,7 @@ class SignupPage extends StatelessWidget {
                 );
               } else if (state is AuthError) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
+                  const SnackBar(
                     backgroundColor: Colors.red,
                     content: Text("Signup error"),
                   ),
@@ -60,14 +63,33 @@ class SignupPage extends StatelessWidget {
                       icon: Icons.email,
                     ),
 
-                    SizedBox(height: 10),
-                    MyTextFiled(
-                      controller: passwordController,
-                      text: 'Enter password',
-                      icon: Icons.key,
+                    const SizedBox(height: 10),
+
+                    // 👇 wrap password field in ValueListenableBuilder
+                    ValueListenableBuilder<bool>(
+                      valueListenable: obscurePassword,
+                      builder: (context, isObscure, _) {
+                        return MyTextFiled(
+                          controller: passwordController,
+                          text: 'Enter password',
+                          icon: Icons.key,
+                          obscureText: isObscure,
+                          suffix: IconButton(
+                            icon: Icon(
+                              isObscure
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                              color: Colors.grey,
+                            ),
+                            onPressed: () {
+                              obscurePassword.value = !isObscure;
+                            },
+                          ),
+                        );
+                      },
                     ),
 
-                    SizedBox(height: 55),
+                    const SizedBox(height: 55),
                     if (state is AuthLoading)
                       Lottie.asset(
                         'assets/loading.json',
@@ -92,14 +114,13 @@ class SignupPage extends StatelessWidget {
                         ),
                       ),
 
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
 
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
-                          'Already registered?',
+                        const Text(
+                          'Already registered? ',
                           style: TextStyle(color: Colors.black54, fontSize: 14),
                         ),
                         GestureDetector(
@@ -107,13 +128,17 @@ class SignupPage extends StatelessWidget {
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => LoginScreen(),
+                                builder: (context) => const LoginScreen(),
                               ),
                             );
                           },
-                          child: Text(
+                          child: const Text(
                             'Login now',
-                            style: TextStyle(color: Colors.blue, fontSize: 16),
+                            style: TextStyle(
+                              color: Colors.blue,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
                       ],
