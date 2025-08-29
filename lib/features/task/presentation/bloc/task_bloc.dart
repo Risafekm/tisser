@@ -1,6 +1,7 @@
 // features/lead/presentation/bloc/lead_bloc.dart
-import 'package:firebase_core/firebase_core.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tisser_app/features/task/data/data_source/helper.dart';
 import 'package:tisser_app/features/task/domain/usecases/add_task_usecase.dart';
 import 'package:tisser_app/features/task/domain/usecases/delete_task_usecase.dart';
 import 'package:tisser_app/features/task/domain/usecases/get_task_usecae.dart';
@@ -13,6 +14,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   final AddTaskUseCase addTask;
   final UpdateTaskUseCase updateTask;
   final DeleteTaskUseCase deleteTask;
+  final TaskCache taskCache = TaskCache();
 
   TaskBloc({
     required this.getTasks,
@@ -22,50 +24,54 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   }) : super(TaskInitial()) {
     on<LoadTasksEvent>((event, emit) async {
       emit(TaskLoading());
-      try {
-        final leadsStream = getTasks();
-        await for (final leads in leadsStream) {
-          emit(TaskLoaded(leads));
+
+      // 1. Load cached tasks first
+      final cachedTasks = await taskCache.loadTasks();
+      if (cachedTasks.isNotEmpty) {
+        emit(TaskLoaded(cachedTasks));
+      }
+
+      // 2. Check internet and fetch live data
+      final connectivity = await Connectivity().checkConnectivity();
+      if (connectivity != ConnectivityResult.none) {
+        try {
+          final tasksStream = getTasks();
+          await for (final tasks in tasksStream) {
+            emit(TaskLoaded(tasks));
+            await taskCache.saveTasks(tasks); // save latest to cache
+          }
+        } catch (e) {
+          if (cachedTasks.isEmpty) {
+            emit(TaskError('Failed to load tasks: ${e.toString()}'));
+          }
         }
-      } catch (e) {
-        emit(TaskError('Failed to load leads: ${e.toString()}'));
       }
     });
 
-    // on<AddLeadEvent>((event, emit) async {
-    //   try {
-    //     await addLead(event.lead);
-    //   } catch (e) {
-    //     emit(LeadError('Failed to add lead: ${e.toString()}'));
-    //   }
-    // });
-    // features/lead/presentation/bloc/lead_bloc.dart
     on<AddTaskEvent>((event, emit) async {
       try {
-        emit(TaskLoading());
         await addTask(event.task);
-        // Optionally emit success state or reload leads
-        add(LoadTasksEvent()); // Reload leads after adding
-      } on FirebaseException catch (e) {
-        emit(TaskError('Firestore error: ${e.code} - ${e.message}'));
+        add(LoadTasksEvent());
       } catch (e) {
-        emit(TaskError('Failed to add lead: ${e.toString()}'));
+        emit(TaskError('Failed to add task: ${e.toString()}'));
       }
     });
 
     on<UpdateTaskEvent>((event, emit) async {
       try {
         await updateTask(event.task);
+        add(LoadTasksEvent());
       } catch (e) {
-        emit(TaskError('Failed to update lead: ${e.toString()}'));
+        emit(TaskError('Failed to update task: ${e.toString()}'));
       }
     });
 
     on<DeleteTaskEvent>((event, emit) async {
       try {
         await deleteTask(event.id);
+        add(LoadTasksEvent());
       } catch (e) {
-        emit(TaskError('Failed to delete lead: ${e.toString()}'));
+        emit(TaskError('Failed to delete task: ${e.toString()}'));
       }
     });
   }

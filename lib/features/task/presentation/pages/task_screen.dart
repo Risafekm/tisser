@@ -7,6 +7,7 @@ import 'package:tisser_app/features/task/presentation/bloc/task_bloc.dart';
 import 'package:tisser_app/features/task/presentation/bloc/task_event.dart';
 import 'package:tisser_app/features/task/presentation/bloc/task_state.dart';
 import 'package:tisser_app/features/task/presentation/pages/add_edit_task_screen.dart';
+import 'package:tisser_app/features/task/presentation/pages/description_page.dart';
 
 class TasksPage extends StatelessWidget {
   const TasksPage({super.key});
@@ -226,7 +227,12 @@ class TaskCard extends StatelessWidget {
         child: InkWell(
           borderRadius: BorderRadius.circular(16),
           onTap: () {
-            // Navigate to task details
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => TaskDetailsPage(task: task),
+              ),
+            );
           },
           child: Padding(
             padding: const EdgeInsets.all(16),
