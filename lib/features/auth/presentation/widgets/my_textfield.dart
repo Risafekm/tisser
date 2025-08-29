@@ -1,5 +1,4 @@
-// ignore_for_file: must_be_immutable
-
+// my_textfield.dart
 import 'package:flutter/material.dart';
 
 class MyTextFiled extends StatelessWidget {
@@ -9,6 +8,7 @@ class MyTextFiled extends StatelessWidget {
   final Widget? suffix;
   final bool obscureText;
   final int? maxLines;
+  final String? Function(String?)? validator; // ✅ added validator
 
   const MyTextFiled({
     super.key,
@@ -18,47 +18,31 @@ class MyTextFiled extends StatelessWidget {
     this.suffix,
     this.obscureText = false,
     this.maxLines = 1,
+    this.validator,
   });
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
+      // ✅ changed from TextField to TextFormField
       controller: controller,
       obscureText: obscureText,
       maxLines: maxLines,
+      validator: validator, // ✅ added validator
       decoration: InputDecoration(
         labelText: text,
         prefixIcon: icon != null ? Icon(icon) : null,
         suffixIcon: suffix,
-
-        // Default border
         border: const OutlineInputBorder(),
-
-        // Enabled border
         enabledBorder: const OutlineInputBorder(
           borderSide: BorderSide(color: Colors.grey, width: 1.0),
         ),
-
-        // Focused border
         focusedBorder: const OutlineInputBorder(
           borderSide: BorderSide(color: Colors.deepOrange, width: 2.0),
         ),
-
-        // Disabled border
-        disabledBorder: const OutlineInputBorder(
-          borderSide: BorderSide(
-            color: Colors.grey,
-            width: 1.0,
-            style: BorderStyle.solid,
-          ),
-        ),
-
-        // Error border
         errorBorder: const OutlineInputBorder(
           borderSide: BorderSide(color: Colors.red, width: 1.0),
         ),
-
-        // Focused error border
         focusedErrorBorder: const OutlineInputBorder(
           borderSide: BorderSide(color: Colors.red, width: 2.0),
         ),
