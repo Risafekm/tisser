@@ -93,7 +93,7 @@ class SignupPage extends StatelessWidget {
                     if (state is AuthLoading)
                       Lottie.asset(
                         'assets/loading.json',
-                        height: 40,
+                        height: 50,
                         repeat: true,
                         reverse: false,
                         animate: true,

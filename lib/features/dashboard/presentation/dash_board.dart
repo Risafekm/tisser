@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 import 'package:tisser_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:tisser_app/features/auth/presentation/bloc/auth_events.dart';
+import 'package:tisser_app/features/auth/presentation/bloc/auth_state.dart';
 import 'package:tisser_app/features/auth/presentation/pages/login_page.dart';
 import 'package:tisser_app/features/task/presentation/bloc/task_bloc.dart';
 import 'package:tisser_app/features/task/presentation/bloc/task_state.dart';
@@ -15,33 +17,57 @@ class DashBoard extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
-        statusBarColor: Colors.deepOrange, // notch/status bar background
-        statusBarIconBrightness: Brightness.light, // icons white
+        statusBarColor: Colors.deepOrange,
+        statusBarIconBrightness: Brightness.light,
       ),
       child: Scaffold(
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(90),
           child: Padding(
             padding: const EdgeInsets.only(top: 30),
-            child: AppBar(
-              title: const Text(
-                'Dashboard',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              backgroundColor: Colors.white,
-              foregroundColor: Colors.deepOrange,
-              elevation: 1,
-              actions: [
-                IconButton(
-                  onPressed: () {
-                    context.read<AuthBloc>().add(SignOutEvent());
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (context) => LoginScreen()),
-                    );
-                  },
-                  icon: const Icon(Icons.logout),
-                ),
-              ],
+            child: BlocConsumer<AuthBloc, AuthState>(
+              listener: (context, state) {
+                if (state is AuthUnAuthenticated) {
+                  // After successful logout → go to LoginScreen
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => const LoginScreen(),
+                    ),
+                  );
+                }
+              },
+              builder: (context, state) {
+                return AppBar(
+                  title: const Text(
+                    'Dashboard',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  backgroundColor: Colors.white,
+                  foregroundColor: Colors.deepOrange,
+                  elevation: 1,
+                  actions: [
+                    if (state is AuthLoading)
+                      // 👇 show Lottie loading while logging out
+                      Padding(
+                        padding: const EdgeInsets.only(right: 16),
+                        child: Lottie.asset(
+                          'assets/loading.json',
+                          height: 50,
+                          repeat: true,
+                          reverse: false,
+                          animate: true,
+                        ),
+                      )
+                    else
+                      IconButton(
+                        onPressed: () {
+                          context.read<AuthBloc>().add(SignOutEvent());
+                        },
+                        icon: const Icon(Icons.logout),
+                      ),
+                  ],
+                );
+              },
             ),
           ),
         ),
@@ -79,18 +105,19 @@ class DashBoard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    // Total Task Count Card
+
+                    // 🔹 Total Task Count Card
                     Card(
                       elevation: 4,
                       child: Container(
-                        height: 110, // reduced 10px height
+                        height: 110,
                         width: double.infinity,
                         padding: const EdgeInsets.all(16),
                         child: Row(
                           children: [
                             const Icon(
                               Icons.task,
-                              size: 36, // slightly smaller icon
+                              size: 36,
                               color: Colors.deepOrange,
                             ),
                             const SizedBox(width: 16),
@@ -101,14 +128,14 @@ class DashBoard extends StatelessWidget {
                                 const Text(
                                   'Total Tasks',
                                   style: TextStyle(
-                                    fontSize: 15, // reduced font size
+                                    fontSize: 15,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
                                 Text(
                                   '$totalTaskCount',
                                   style: const TextStyle(
-                                    fontSize: 26, // reduced from 32 → 26
+                                    fontSize: 26,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.deepOrange,
                                   ),
@@ -125,6 +152,7 @@ class DashBoard extends StatelessWidget {
                         ),
                       ),
                     ),
+
                     const SizedBox(height: 24),
                     const Text(
                       'Tasks by Status',
@@ -134,14 +162,14 @@ class DashBoard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 16),
+
                     GridView.count(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       crossAxisCount: 2,
-                      crossAxisSpacing: 16, // reduced spacing
+                      crossAxisSpacing: 16,
                       mainAxisSpacing: 16,
-                      childAspectRatio:
-                          1.04, // makes card smaller (height reduced)
+                      childAspectRatio: 1.04,
                       children: [
                         _buildStatusCard(
                           'New',
@@ -194,17 +222,17 @@ class DashBoard extends StatelessWidget {
           borderRadius: BorderRadius.circular(14),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(12.0), // reduced padding
+          padding: const EdgeInsets.all(12.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Icon(icon, size: 28, color: color), // smaller icon
+              Icon(icon, size: 28, color: color),
               const SizedBox(height: 10),
               Text(
                 status,
                 style: TextStyle(
-                  fontSize: 14, // reduced from 16
+                  fontSize: 14,
                   fontWeight: FontWeight.w600,
                   color: color,
                 ),
@@ -213,7 +241,7 @@ class DashBoard extends StatelessWidget {
               Text(
                 '$count',
                 style: const TextStyle(
-                  fontSize: 22, // reduced from 28
+                  fontSize: 22,
                   fontWeight: FontWeight.bold,
                   color: Colors.deepOrange,
                 ),
