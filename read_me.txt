@@ -10,4 +10,4 @@
 
 6, If the internet is off, the tasks that were loaded earlier will be shown.
 
-7, If a task is clicked, it navigates to the Description Screen.
+7, If a task is clicked, it navigates to the Description Screen....
